@@ -30,8 +30,9 @@ export class MemStorage implements IStorage {
     this.currentCategoryId = 1;
     this.currentExpenseId = 1;
     
-    // Initialize with default categories
+    // Initialize with default categories and sample expenses
     this.initializeDefaultCategories();
+    this.initializeSampleExpenses();
   }
 
   private initializeDefaultCategories() {
@@ -47,8 +48,46 @@ export class MemStorage implements IStorage {
 
     defaultCategories.forEach(category => {
       const id = this.currentCategoryId++;
-      const categoryWithId: Category = { ...category, id };
+      const categoryWithId: Category = { ...category, id, description: category.description || null };
       this.categories.set(id, categoryWithId);
+    });
+  }
+
+  private initializeSampleExpenses() {
+    const now = new Date();
+    const sampleExpenses = [
+      // Today's expenses
+      { amount: "15.50", description: "Lunch at Pizza Palace", categoryId: 1, date: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 30) },
+      { amount: "8.75", description: "Coffee and pastry", categoryId: 1, date: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 15) },
+      { amount: "45.00", description: "Gas station fill-up", categoryId: 2, date: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7, 45) },
+      
+      // Yesterday's expenses
+      { amount: "89.99", description: "Grocery shopping", categoryId: 1, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 18, 0) },
+      { amount: "25.00", description: "Movie tickets", categoryId: 4, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 19, 30) },
+      { amount: "12.50", description: "Uber ride", categoryId: 2, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 22, 15) },
+      
+      // This week's expenses
+      { amount: "120.00", description: "Electric bill", categoryId: 5, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2, 10, 0) },
+      { amount: "65.99", description: "New shirt", categoryId: 3, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 3, 15, 30) },
+      { amount: "35.00", description: "Dinner with friends", categoryId: 1, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 4, 19, 0) },
+      { amount: "18.99", description: "Streaming subscription", categoryId: 4, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 5, 9, 0) },
+      
+      // Earlier this month
+      { amount: "150.00", description: "Doctor visit", categoryId: 6, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 8, 14, 0) },
+      { amount: "75.50", description: "Weekend groceries", categoryId: 1, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 10, 11, 30) },
+      { amount: "42.00", description: "Phone bill", categoryId: 5, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 12, 16, 0) },
+      { amount: "28.99", description: "Book purchase", categoryId: 7, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 15, 20, 0) },
+      { amount: "95.00", description: "Gym membership", categoryId: 6, date: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 18, 8, 0) },
+    ];
+
+    sampleExpenses.forEach(expenseData => {
+      const id = this.currentExpenseId++;
+      const expense: Expense = {
+        ...expenseData,
+        id,
+        createdAt: expenseData.date,
+      };
+      this.expenses.set(id, expense);
     });
   }
 
