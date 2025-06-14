@@ -1,5 +1,13 @@
 import { Menu, Plus, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger,
+  DropdownMenuSeparator
+} from "@/components/ui/dropdown-menu";
+import { useLocation } from "wouter";
 
 interface HeaderProps {
   currentTab: string;
@@ -8,6 +16,8 @@ interface HeaderProps {
 }
 
 export default function Header({ currentTab, onMenuClick, onAddExpense }: HeaderProps) {
+  const [, setLocation] = useLocation();
+
   const getPageTitle = () => {
     const titles = {
       dashboard: "Dashboard",
@@ -40,9 +50,37 @@ export default function Header({ currentTab, onMenuClick, onAddExpense }: Header
             <Plus className="mr-2 h-4 w-4" />
             Add Expense
           </Button>
-          <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center">
-            <User className="h-4 w-4" />
-          </div>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center">
+                  <User className="h-4 w-4" />
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <div className="flex items-center justify-start gap-2 p-2">
+                <div className="flex flex-col space-y-1 leading-none">
+                  <p className="font-medium">John Doe</p>
+                  <p className="w-[200px] truncate text-sm text-muted-foreground">
+                    john.doe@example.com
+                  </p>
+                </div>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setLocation("/profile")}>
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setLocation("/auth")}>
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

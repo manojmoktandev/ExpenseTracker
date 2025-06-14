@@ -125,6 +125,11 @@ export default function Dashboard() {
         onClose={() => setIsModalOpen(false)}
         categories={categories}
       />
+
+      <AddCategoryModal
+        isOpen={isCategoryModalOpen}
+        onClose={() => setIsCategoryModalOpen(false)}
+      />
     </div>
   );
 }
