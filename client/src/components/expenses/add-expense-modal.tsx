@@ -12,8 +12,12 @@ import { apiRequest } from "@/lib/queryClient";
 import { insertExpenseSchema, type Category } from "@shared/schema";
 import { z } from "zod";
 
-const formSchema = insertExpenseSchema.extend({
-  categoryId: z.string().transform((val) => parseInt(val)),
+// Form data matches the HTML form inputs (strings)
+const formSchema = z.object({
+  amount: z.string().min(1, "Amount is required"),
+  description: z.string().min(1, "Description is required"),
+  categoryId: z.string().min(1, "Category is required"),
+  date: z.string().min(1, "Date is required"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -63,7 +67,14 @@ export default function AddExpenseModal({ isOpen, onClose, categories }: AddExpe
   });
 
   const onSubmit = (data: FormData) => {
-    createExpenseMutation.mutate(data);
+    // Transform form data to match API expectations
+    const transformedData = {
+      amount: data.amount,
+      description: data.description,
+      categoryId: parseInt(data.categoryId),
+      date: data.date,
+    };
+    createExpenseMutation.mutate(transformedData);
   };
 
   const handleClose = () => {

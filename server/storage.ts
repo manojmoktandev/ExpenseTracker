@@ -48,7 +48,7 @@ export class MemStorage implements IStorage {
 
     defaultCategories.forEach(category => {
       const id = this.currentCategoryId++;
-      const categoryWithId: Category = { ...category, id, description: category.description || null };
+      const categoryWithId: Category = { ...category, id, description: category.description ?? null };
       this.categories.set(id, categoryWithId);
     });
   }
@@ -101,7 +101,7 @@ export class MemStorage implements IStorage {
 
   async createCategory(insertCategory: InsertCategory): Promise<Category> {
     const id = this.currentCategoryId++;
-    const category: Category = { ...insertCategory, id };
+    const category: Category = { ...insertCategory, id, description: insertCategory.description ?? null };
     this.categories.set(id, category);
     return category;
   }
